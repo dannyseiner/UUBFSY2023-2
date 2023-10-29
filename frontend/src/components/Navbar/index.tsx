@@ -36,6 +36,7 @@ export default function Navbar() {
       }
     }
   }, [loggedUser]);
+
   return (
     <div
       className={
@@ -59,7 +60,7 @@ export default function Navbar() {
           className={"h-[30px]"}
         >
           {mockUsers.map((user) => (
-            <MenuItem value={user.uuid}>{user.name}</MenuItem>
+            <MenuItem value={user.uuid} key={user.uuid}>{user.name}</MenuItem>
           ))}
         </Select>
       </div>

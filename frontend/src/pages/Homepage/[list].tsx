@@ -9,19 +9,17 @@ import { User } from "../../types/user";
 import { UserContext } from "../../context/UserContext";
 
 // ICONS
-import GroupIcon from "@mui/icons-material/Group";
-import SettingsIcon from "@mui/icons-material/Settings";
 import DeleteIcon from "@mui/icons-material/Delete";
-import AddBoxIcon from "@mui/icons-material/AddBox";
-import DoneIcon from "@mui/icons-material/Done";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import ListAdminPanel from "../../components/List/ListAdminPanel";
+import FilterMenu from "../../components/List/Filters";
 
 export default function ShoppingList() {
   const { user } = useContext(UserContext);
   const { listUuid } = useParams();
   const [list, setList] = useState<List>();
+  const [filteredList, setFilteredList] = useState<List>();
 
   const [showUserEdit, setShowUserEdit] = useState<boolean>(false);
   const [newUser, setNewUser] = useState<string>("");
@@ -50,6 +48,9 @@ export default function ShoppingList() {
   useEffect(() => {
     if (list && list.name) {
       setListName(list.name);
+    }
+    if (list) {
+      setFilteredList(list);
     }
   }, [list]);
 
@@ -162,7 +163,7 @@ export default function ShoppingList() {
         <div className={"flex flex-col"}>
           {list &&
             list.users.map((user) => (
-              <div className={"flex items-center justify-between"}>
+              <div className={"flex items-center justify-between"} key={user.uuid}>
                 <p>{user.name}</p>
                 <PersonRemoveIcon
                   sx={{ fontSize: "20px", cursor: "pointer" }}
@@ -174,10 +175,13 @@ export default function ShoppingList() {
       </Drawer>
 
       <div className={"w-[80%] bg-white mx-auto rounded-lg px-4 py-6"}>
+        <div className={"flex items-center justify-between"}>
+          <FilterMenu list={list} setList={(e: List) => setFilteredList(e)} />
+        </div>
         <ListAdminPanel isEditingName={isEditingName} setIsEditingName={setIsEditingName} listName={listName} setListName={setListName} newItem={newItem} setNewItem={setNewItem} hanndleNewItemChange={hanndleNewItemChange} handleAddItem={handleAddItem} list={list} setShowUserEdit={setShowUserEdit} handleNameChange={handleNameChange} handleLeaveList={handleLeaveList} />
         <div className={"flex flex-col my-[10px] gap-[10px]"}>
-          {list &&
-            list?.items.map((item) => (
+          {filteredList &&
+            filteredList?.items.map((item) => (
               <div
                 key={item.uuid}
                 className={"flex items-center justify-between"}
