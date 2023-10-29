@@ -16,8 +16,7 @@ import AddBoxIcon from "@mui/icons-material/AddBox";
 import DoneIcon from "@mui/icons-material/Done";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import { Select } from "@mui/material";
+import ListAdminPanel from "../../components/List/ListAdminPanel";
 
 export default function ShoppingList() {
   const { user } = useContext(UserContext);
@@ -132,6 +131,14 @@ export default function ShoppingList() {
     }
   };
 
+  const handleLeaveList = () => {
+    if (list && user && user.uuid !== list.owner.uuid) {
+      const _users = list.users.filter((_user) => _user.uuid !== user.uuid);
+      setList({ ...list, users: _users });
+      window.location.href = "/";
+    }
+  }
+
   return (
     <>
       <Drawer
@@ -167,50 +174,7 @@ export default function ShoppingList() {
       </Drawer>
 
       <div className={"w-[80%] bg-white mx-auto rounded-lg px-4 py-6"}>
-        <div className={"flex items-center justify-between"}>
-          {isEditingName ? (
-            <input
-              type={"text"}
-              value={listName}
-              className={"border rounded-md px-2"}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setListName(e.target.value)
-              }
-            />
-          ) : (
-            <p className={"text-[16px] font-bold"}>{list?.name}</p>
-          )}
-          <div className={"flex gap-[20px]"}>
-            <AddBoxIcon sx={{ fontSize: "30px", cursor: "pointer" }} />
-            {list && user && user.uuid === list.owner.uuid && (
-              <GroupIcon
-                sx={{ fontSize: "30px", cursor: "pointer" }}
-                onClick={() => setShowUserEdit(true)}
-              />
-            )}
-
-            {list && user && user.uuid === list.owner.uuid && (
-              <>
-                {isEditingName ? (
-                  <DoneIcon
-                    sx={{ fontSize: "30px", cursor: "pointer" }}
-                    onClick={() => handleNameChange()}
-                  />
-                ) : (
-                  <SettingsIcon
-                    sx={{ fontSize: "30px", cursor: "pointer" }}
-                    onClick={() => setIsEditingName(true)}
-                  />
-                )}
-              </>
-            )}
-          </div>
-        </div>
-        <div className={"flex items-center justify-between"}>
-          <div className={"flex items-center gap-[10px]"}>
-     
-          </div>
-        </div>
+        <ListAdminPanel isEditingName={isEditingName} setIsEditingName={setIsEditingName} listName={listName} setListName={setListName} newItem={newItem} setNewItem={setNewItem} hanndleNewItemChange={hanndleNewItemChange} handleAddItem={handleAddItem} list={list} setShowUserEdit={setShowUserEdit} handleNameChange={handleNameChange} handleLeaveList={handleLeaveList} />
         <div className={"flex flex-col my-[10px] gap-[10px]"}>
           {list &&
             list?.items.map((item) => (
@@ -224,9 +188,8 @@ export default function ShoppingList() {
                 >
                   <input type={"checkbox"} checked={item.archived} />
                   <p
-                    className={`${
-                      item.archived ? "line-through text-gray-300" : ""
-                    }`}
+                    className={`${item.archived ? "line-through text-gray-300" : ""
+                      }`}
                   >
                     {item.name}
                   </p>
