@@ -1,47 +1,64 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { mockLists } from "../../data/lists";
 import { List } from "../../types/list";
-import { Link, redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { ShoppingListsContext } from "../../context/ShoppingLists";
+import { UserContext } from "../../context/UserContext";
 
 export default function Homepage() {
+  const { shoppingLists, setShoppingLists } = useContext(ShoppingListsContext)
   const [lists, setLists] = useState<List[]>(mockLists);
+  const { user } = useContext(UserContext)
+
+  const handleDeleteShoppingList = (list: List) => {
+    if (window.confirm("Přejete si smazat list?")) {
+      const _lists = shoppingLists.filter((_list) => _list.uuid !== list.uuid)
+      setShoppingLists(_lists)
+      alert("List smazán")
+    }
+  }
+
+  useEffect(() => {
+    const _lists = shoppingLists.filter((list) => list.owner.uuid === user?.uuid || list.users.find((user) => user.uuid === user?.uuid))
+    setLists(_lists)
+  }, [shoppingLists, user])
 
   return (
     <div>
       <div className={"flex justify-center"}>
         <div className={"w-[80%] flex flex-col gap-[20px]"}>
           <div className={"flex justify-between"}>
-            <p className={"text-[24px] font-bold"}>Shopping Lists</p>
+            <p className={"text-[24px] font-bold"}>Nákupní seznamy</p>
             <div className={"flex gap-[10px]"}>
               <div className={"flex items-center gap-[10px] cursor-pointer"}>
                 <p className={"text-[18px] font-bold text-orange-400"}>+</p>
-                <p className={"text-[18px] font-bold text-orange-400"}>
-                  New List
-                </p>
+                <Link className={"text-[18px] font-bold text-orange-400"} to={"/list/create"}>
+                  Vytvořit seznam
+                </Link>
               </div>
             </div>
           </div>
           <div className={"flex flex-col gap-[10px]"}>
-            {lists.map((list, index) => (
-              <Link
-                to={`/list/${list.uuid}`}
+            {shoppingLists && user && lists.map((list, index) => (
+              <div
                 key={index}
                 className={
                   "flex items-center justify-between bg-[rgba(255,255,255,0.8)] shadow-2xl px-4 py-2 rounded-xl"
                 }
               >
-                <p className={"text-[18px] font-bold"}>{list.name}</p>
-                <div className={"flex gap-[10px]"}>
-                  <div
-                    className={"flex items-center gap-[10px] cursor-pointer"}
-                  >
-                    <p className={"text-[18px] font-bold text-orange-400"}>+</p>
-                    <p className={"text-[18px] font-bold text-orange-400"}>
-                      New Item
-                    </p>
+                <Link className={"text-[18px] font-bold"} to={`/list/${list.uuid}`}>{list.name}</Link>
+                {list.owner.uuid === user.uuid && (
+                  <div className={"flex gap-[10px]"} onClick={() => handleDeleteShoppingList(list)}>
+                    <div
+                      className={"flex items-center gap-[10px] cursor-pointer"}
+                    >
+                      <p className={"text-[18px] font-bold text-orange-400"}>
+                        Smazat
+                      </p>
+                    </div>
                   </div>
-                </div>
-              </Link>
+                )}
+              </div>
             ))}
           </div>
         </div>

@@ -14,8 +14,10 @@ import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import ListAdminPanel from "../../components/List/ListAdminPanel";
 import FilterMenu from "../../components/List/Filters";
+import { ShoppingListsContext } from "../../context/ShoppingLists";
 
 export default function ShoppingList() {
+  const { shoppingLists, setShoppingLists } = useContext(ShoppingListsContext);
   const { user } = useContext(UserContext);
   const { listUuid } = useParams();
   const [list, setList] = useState<List>();
@@ -34,8 +36,8 @@ export default function ShoppingList() {
     setNewItem(e.target.value);
 
   useEffect(() => {
-    if (listUuid) {
-      const list = mockLists.find((list) => list.uuid === listUuid);
+    if (listUuid && shoppingLists) {
+      const list = shoppingLists.find((list) => list.uuid === listUuid);
       if (list) {
         setList(list);
       } else {
@@ -44,6 +46,20 @@ export default function ShoppingList() {
       }
     }
   }, [listUuid]);
+
+  // SAVE LIST TO CONTEXT
+  useEffect(() => {
+    if (list) {
+      const _lists = shoppingLists.map((_list) => {
+        if (_list.uuid === list.uuid) {
+          return list
+        } else {
+          return _list
+        }
+      })
+      setShoppingLists(_lists)
+    }
+  }, [list])
 
   useEffect(() => {
     if (list && list.name) {

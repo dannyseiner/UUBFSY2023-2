@@ -7,6 +7,8 @@ import GroupIcon from "@mui/icons-material/Group";
 import SettingsIcon from "@mui/icons-material/Settings";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import DoneIcon from "@mui/icons-material/Done";
+import { DeleteOutline } from '@mui/icons-material';
+import { ShoppingListsContext } from '../../../context/ShoppingLists';
 
 type AdminPanelProps = {
     isEditingName: boolean;
@@ -25,6 +27,8 @@ type AdminPanelProps = {
 
 export default function ListAdminPanel({ isEditingName, setIsEditingName, listName, setListName, newItem, handleLeaveList, hanndleNewItemChange, handleAddItem, list, setShowUserEdit, handleNameChange }: AdminPanelProps) {
     const { user } = useContext(UserContext);
+    const { shoppingLists, setShoppingLists } = useContext(ShoppingListsContext)
+
     return (
         <div>
             <div className={"flex items-center justify-between"}>
