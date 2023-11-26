@@ -7,7 +7,6 @@ import GroupIcon from "@mui/icons-material/Group";
 import SettingsIcon from "@mui/icons-material/Settings";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import DoneIcon from "@mui/icons-material/Done";
-import { DeleteOutline } from '@mui/icons-material';
 import { ShoppingListsContext } from '../../../context/ShoppingLists';
 
 type AdminPanelProps = {
@@ -30,8 +29,8 @@ export default function ListAdminPanel({ isEditingName, setIsEditingName, listNa
     const { shoppingLists, setShoppingLists } = useContext(ShoppingListsContext)
 
     return (
-        <div>
-            <div className={"flex items-center justify-between"}>
+        <div className={""}>
+            <div className={"flex items-center justify-between mt-[20px] uppercase"}>
                 {isEditingName ? (
                     <input
                         type={"text"}
@@ -42,7 +41,7 @@ export default function ListAdminPanel({ isEditingName, setIsEditingName, listNa
                         }
                     />
                 ) : (
-                    <p className={"text-[16px] font-bold"}>{list?.name}</p>
+                    <p className={"text-[16px] font-bold text-orange-300"}>{list?.name}</p>
                 )}
                 <div className={"flex gap-[20px]"}>
                     <div className={"flex items-center gap-[10px]"}>

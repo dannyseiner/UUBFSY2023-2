@@ -4,8 +4,11 @@ import { List } from "../../types/list";
 import { Link } from "react-router-dom";
 import { ShoppingListsContext } from "../../context/ShoppingLists";
 import { UserContext } from "../../context/UserContext";
+import { useShoppingLists } from "../../components/api/Queries/useShoppingLists";
+import Loader from "../../components/Loader";
 
 export default function Homepage() {
+  const {data, isLoading} = useShoppingLists()
   const { shoppingLists, setShoppingLists } = useContext(ShoppingListsContext)
   const [lists, setLists] = useState<List[]>(mockLists);
   const { user } = useContext(UserContext)
@@ -19,12 +22,17 @@ export default function Homepage() {
   }
 
   useEffect(() => {
+    if(data) setLists(data)
+  }, [data])
+
+  useEffect(() => {
     const _lists = shoppingLists.filter((list) => list.owner.uuid === user?.uuid || list.users.find((user) => user.uuid === user?.uuid))
     setLists(_lists)
-  }, [shoppingLists, user])
+  }, [shoppingLists, user, data])
 
   return (
     <div>
+      {isLoading ?? <Loader />}
       <div className={"flex justify-center"}>
         <div className={"w-[80%] flex flex-col gap-[20px]"}>
           <div className={"flex justify-between"}>
@@ -39,7 +47,7 @@ export default function Homepage() {
             </div>
           </div>
           <div className={"flex flex-col gap-[10px]"}>
-            {shoppingLists && user && lists.map((list, index) => (
+            {user && lists.map((list, index) => (
               <div
                 key={index}
                 className={

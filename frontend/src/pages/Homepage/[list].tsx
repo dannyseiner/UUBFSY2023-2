@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { redirect, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { mockLists } from "../../data/lists";
 import { List } from "../../types/list";
@@ -15,11 +15,15 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import ListAdminPanel from "../../components/List/ListAdminPanel";
 import FilterMenu from "../../components/List/Filters";
 import { ShoppingListsContext } from "../../context/ShoppingLists";
+import { useShoppingList } from "../../components/api/Queries/useShoppingList";
+import Loader from "../../components/Loader";
 
 export default function ShoppingList() {
+  const { listUuid } = useParams();
+  const {isLoading, data} = useShoppingList(listUuid)
+  const navigate = useNavigate()
   const { shoppingLists, setShoppingLists } = useContext(ShoppingListsContext);
   const { user } = useContext(UserContext);
-  const { listUuid } = useParams();
   const [list, setList] = useState<List>();
   const [filteredList, setFilteredList] = useState<List>();
 
@@ -42,7 +46,7 @@ export default function ShoppingList() {
         setList(list);
       } else {
         alert("List not found");
-        redirect("/");
+        navigate('/')
       }
     }
   }, [listUuid]);
@@ -158,6 +162,7 @@ export default function ShoppingList() {
 
   return (
     <>
+    {isLoading && <Loader />}
       <Drawer
         backgroundBlur
         open={showUserEdit}

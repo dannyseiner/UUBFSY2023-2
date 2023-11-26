@@ -1,0 +1,221 @@
+openapi: 3.0.0
+info:
+  title: List Management API
+  version: 1.0.0
+paths:
+  /shopping-lists:
+    get:
+      summary: Retrieve all lists
+      responses:
+        '200':
+          description: A list of lists
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/List'
+              examples:
+                example1:
+                  value:
+                    - uuid: '1'
+                      name: 'Grocery List'
+                      users:
+                        - uuid: '1'
+                          name: 'Alice'
+                        - uuid: '2'
+                          name: 'Honzik'
+                      items:
+                        - uuid: '1'
+                          name: 'Apples'
+                          isArchived: false
+                        - uuid: '2'
+                          name: 'Bananas'
+                          isArchived: true
+                    # - uuid: '2'
+                    #   name: 'Office Supplies'
+                    #   users:
+                    #     - uuid: '3'
+                    #       name: 'Honzik'
+                    #     - uuid: '4'
+                    #       name: 'Bob'
+                    #   items:
+                    #     - uuid: '3'
+                    #       name: 'Pens'
+                    #       isArchived: false
+                    #     - uuid: '4'
+                    #       name: 'Notebooks'
+                    #       isArchived: false
+    post:
+      summary: Create a new list
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/List'
+            example:
+              name: 'New List'
+              users:
+                - id: '1'
+                  name: 'Alice'
+                  isOwner: true
+                - id: '2'
+                  name: 'Honzik'
+                  isOwner: false
+              items:
+                - id: '1'
+                  name: 'Item 1'
+                  isCompleted: false
+      responses:
+        '201':
+          description: List created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/List'
+              example:
+                id: '3'
+                name: 'New List'
+                users:
+                  - id: '1'
+                    name: 'Alice'
+                    isOwner: true
+                  - id: '2'
+                    name: 'Honzik'
+                    isOwner: false
+                items:
+                  - id: '1'
+                    name: 'Item 1'
+                    isCompleted: false
+
+  /shopping-lists/{id}:
+    get:
+      summary: Retrieve a list by its ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A single list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/List'
+              example:
+                id: '1'
+                name: 'Grocery List'
+                users:
+                  - id: '1'
+                    name: 'Alice'
+                    isOwner: true
+                  - id: '2'
+                    name: 'Honzik'
+                    isOwner: false
+                items:
+                  - id: '1'
+                    name: 'Apples'
+                    isCompleted: false
+                  - id: '2'
+                    name: 'Bananas'
+                    isCompleted: true
+    patch:
+      summary: Update a list
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/List'
+            example:
+              name: 'Updated List Name'
+              users:
+                - id: '1'
+                  name: 'Alice'
+                  isOwner: true
+                - id: '2'
+                  name: 'Honzik'
+                  isOwner: false
+              items:
+                - id: '1'
+                  name: 'Oranges'
+                  isCompleted: false
+                - id: '2'
+                  name: 'Grapes'
+                  isCompleted: true
+      responses:
+        '200':
+          description: List updated
+
+    delete:
+      summary: Delete a list by its ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: List deleted successfully
+        '404':
+          description: List not found
+
+components:
+  schemas:
+    List:
+      type: object
+      required:
+        - name
+        - users
+        - items
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ListItem'
+
+    User:
+      type: object
+      required:
+        - id
+        - name
+        - isOwner
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        isOwner:
+          type: boolean
+
+    ListItem:
+      type: object
+      required:
+        - id
+        - name
+        - isCompleted
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        isCompleted:
+          type: boolean
