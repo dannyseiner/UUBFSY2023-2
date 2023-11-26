@@ -2,21 +2,19 @@ import { useContext, useEffect, useState } from "react";
 import { mockLists } from "../../data/lists";
 import { List } from "../../types/list";
 import { Link } from "react-router-dom";
-import { ShoppingListsContext } from "../../context/ShoppingLists";
 import { UserContext } from "../../context/UserContext";
 import { useShoppingLists } from "../../components/api/Queries/useShoppingLists";
 import Loader from "../../components/Loader";
+import { api } from "../../components/api";
 
 export default function Homepage() {
   const {data, isLoading} = useShoppingLists()
-  const { shoppingLists, setShoppingLists } = useContext(ShoppingListsContext)
   const [lists, setLists] = useState<List[]>(mockLists);
   const { user } = useContext(UserContext)
 
   const handleDeleteShoppingList = (list: List) => {
     if (window.confirm("Přejete si smazat list?")) {
-      const _lists = shoppingLists.filter((_list) => _list.uuid !== list.uuid)
-      setShoppingLists(_lists)
+      api.delete("/shopping-list/" + list.uuid)
       alert("List smazán")
     }
   }
@@ -25,10 +23,6 @@ export default function Homepage() {
     if(data) setLists(data)
   }, [data])
 
-  useEffect(() => {
-    const _lists = shoppingLists.filter((list) => list.owner.uuid === user?.uuid || list.users.find((user) => user.uuid === user?.uuid))
-    setLists(_lists)
-  }, [shoppingLists, user, data])
 
   return (
     <div>

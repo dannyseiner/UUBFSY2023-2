@@ -17,12 +17,13 @@ import FilterMenu from "../../components/List/Filters";
 import { ShoppingListsContext } from "../../context/ShoppingLists";
 import { useShoppingList } from "../../components/api/Queries/useShoppingList";
 import Loader from "../../components/Loader";
+import { api } from "../../components/api";
 
 export default function ShoppingList() {
   const { listUuid } = useParams();
   const {isLoading, data} = useShoppingList(listUuid)
   const navigate = useNavigate()
-  const { shoppingLists, setShoppingLists } = useContext(ShoppingListsContext);
+  // const { shoppingLists, setShoppingLists } = useContext(ShoppingListsContext);
   const { user } = useContext(UserContext);
   const [list, setList] = useState<List>();
   const [filteredList, setFilteredList] = useState<List>();
@@ -40,30 +41,31 @@ export default function ShoppingList() {
     setNewItem(e.target.value);
 
   useEffect(() => {
-    if (listUuid && shoppingLists) {
-      const list = shoppingLists.find((list) => list.uuid === listUuid);
-      if (list) {
-        setList(list);
-      } else {
-        alert("List not found");
-        navigate('/')
-      }
+    if (listUuid) {
+      api.get("/shopping-list/" + listUuid).then((res) => {
+        if (res.data) {
+          setList(res.data)
+        } else {
+          alert("List not found")
+          navigate("/")
+        }
+      })
     }
   }, [listUuid]);
 
   // SAVE LIST TO CONTEXT
-  useEffect(() => {
-    if (list) {
-      const _lists = shoppingLists.map((_list) => {
-        if (_list.uuid === list.uuid) {
-          return list
-        } else {
-          return _list
-        }
-      })
-      setShoppingLists(_lists)
-    }
-  }, [list])
+  // useEffect(() => {
+  //   if (list) {
+  //     const _lists = shoppingLists.map((_list) => {
+  //       if (_list.uuid === list.uuid) {
+  //         return list
+  //       } else {
+  //         return _list
+  //       }
+  //     })
+  //     setShoppingLists(_lists)
+  //   }
+  // }, [list])
 
   useEffect(() => {
     if (list && list.name) {
@@ -89,6 +91,7 @@ export default function ShoppingList() {
       });
       if (_items && list) {
         setList({ ...list, items: _items });
+        api.post('/shopping-list/' + listUuid, { ...list, items: _items })
       } else {
         alert("Something went wrong");
       }
@@ -103,6 +106,7 @@ export default function ShoppingList() {
 
       if (_items && list) {
         setList({ ...list, items: _items });
+        api.post('/shopping-list/' + listUuid, { ...list, items: _items })
       } else {
         alert("Something went wrong");
       }
@@ -113,6 +117,7 @@ export default function ShoppingList() {
     if (list?.items) {
       const _items = list.items.filter((e) => item !== e);
       setList({ ...list, items: _items });
+      api.post('/shopping-list/' + listUuid, { ...list, items: _items })
     }
   };
 
@@ -120,6 +125,7 @@ export default function ShoppingList() {
     if (listName && list) {
       setList({ ...list, name: listName });
       setIsEditingName(false);
+      api.post('/shopping-list/' + listUuid, list)
     }
   };
 
@@ -127,6 +133,7 @@ export default function ShoppingList() {
     if (list) {
       const _users = list.users.filter((e) => e !== user);
       setList({ ...list, users: _users });
+      api.post('/shopping-list/' + listUuid,  {...list, users: _users })
     }
   };
 
@@ -138,6 +145,7 @@ export default function ShoppingList() {
       ];
       setList({ ...list, users: _users });
       setNewUser("");
+      api.post('/shopping-list/' + listUuid,  {...list, users: _users })
     }
   };
 
@@ -149,6 +157,7 @@ export default function ShoppingList() {
       ];
       setList({ ...list, items: _items });
       setNewItem("");
+      api.post('/shopping-list/' + listUuid,  {...list, items: _items })
     }
   };
 

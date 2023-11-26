@@ -5,10 +5,10 @@ info:
 paths:
   /shopping-lists:
     get:
-      summary: Retrieve all lists
+      summary: Get all lists
       responses:
         '200':
-          description: A list of lists
+          description: lists of list
           content:
             application/json:
               schema:
@@ -19,33 +19,39 @@ paths:
                 example1:
                   value:
                     - uuid: '1'
-                      name: 'Grocery List'
+                      owner:
+                        name: "pepega"
+                        uuid: '1a2b3c4d-5e6f-7g8h-9i0j-1k2l3m4n5o6p'
+                      name: 'Seznam 1'
                       users:
                         - uuid: '1'
                           name: 'Alice'
                         - uuid: '2'
-                          name: 'Honzik'
+                          name: 'Pepe'
                       items:
                         - uuid: '1'
                           name: 'Apples'
-                          isArchived: false
+                          archived: false
                         - uuid: '2'
                           name: 'Bananas'
-                          isArchived: true
-                    # - uuid: '2'
-                    #   name: 'Office Supplies'
-                    #   users:
-                    #     - uuid: '3'
-                    #       name: 'Honzik'
-                    #     - uuid: '4'
-                    #       name: 'Bob'
-                    #   items:
-                    #     - uuid: '3'
-                    #       name: 'Pens'
-                    #       isArchived: false
-                    #     - uuid: '4'
-                    #       name: 'Notebooks'
-                    #       isArchived: false
+                          archived: true
+                    - uuid: '2'
+                      name: 'Seznam 4'
+                      owner:
+                        name: "pepega"
+                        uuid: '1a2b3c4d-5e6f-7g8h-9i0j-1k2l3m4n5o6p'
+                      users:
+                        - uuid: '3'
+                          name: 'Josef'
+                        - uuid: '4'
+                          name: 'Bob'
+                      items:
+                        - uuid: '3'
+                          name: 'Andrej'
+                          archived: false
+                        - uuid: '4'
+                          name: 'Notebooks'
+                          archived: false
     post:
       summary: Create a new list
       requestBody:
@@ -59,14 +65,12 @@ paths:
               users:
                 - id: '1'
                   name: 'Alice'
-                  isOwner: true
                 - id: '2'
                   name: 'Honzik'
-                  isOwner: false
               items:
                 - id: '1'
                   name: 'Item 1'
-                  isCompleted: false
+                  archived: false
       responses:
         '201':
           description: List created successfully
@@ -80,18 +84,16 @@ paths:
                 users:
                   - id: '1'
                     name: 'Alice'
-                    isOwner: true
                   - id: '2'
                     name: 'Honzik'
-                    isOwner: false
                 items:
                   - id: '1'
                     name: 'Item 1'
-                    isCompleted: false
+                    archived: false
 
-  /shopping-lists/{id}:
+  /shopping-list/{id}:
     get:
-      summary: Retrieve a list by its ID
+      summary: Get list by ID
       parameters:
         - name: id
           in: path
@@ -100,29 +102,30 @@ paths:
             type: string
       responses:
         '200':
-          description: A single list
+          description: list by ID
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/List'
               example:
                 id: '1'
-                name: 'Grocery List'
+                name: 'Seznam 1'
+                owner:
+                  name: "pepega"
+                  uuid: '1a2b3c4d-5e6f-7g8h-9i0j-1k2l3m4n5o6p'
                 users:
-                  - id: '1'
+                  - uuid: '1'
                     name: 'Alice'
-                    isOwner: true
-                  - id: '2'
+                  - uuid: '2'
                     name: 'Honzik'
-                    isOwner: false
                 items:
-                  - id: '1'
+                  - uuid: '1'
                     name: 'Apples'
-                    isCompleted: false
-                  - id: '2'
+                    archived: false
+                  - uuid: '2'
                     name: 'Bananas'
-                    isCompleted: true
-    patch:
+                    archived: true
+    post:
       summary: Update a list
       parameters:
         - name: id
@@ -195,23 +198,20 @@ components:
     User:
       type: object
       required:
-        - id
+        - uuid
         - name
-        - isOwner
       properties:
-        id:
+        uuid:
           type: string
         name:
           type: string
-        isOwner:
-          type: boolean
 
     ListItem:
       type: object
       required:
-        - id
+        - uuid
         - name
-        - isCompleted
+        - archived
       properties:
         id:
           type: string
