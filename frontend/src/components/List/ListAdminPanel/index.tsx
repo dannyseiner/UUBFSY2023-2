@@ -35,7 +35,7 @@ export default function ListAdminPanel({ isEditingName, setIsEditingName, listNa
             <input
                 type="text"
                 value={listName}
-                className="border rounded-md px-2 mb-2 sm:mb-0"
+                className="border rounded-md px-2 mb-2 sm:mb-0 dark:bg-gray-500 dark:text-white"
                 onChange={(e) => setListName(e.target.value)}
             />
         ) : (
@@ -48,17 +48,17 @@ export default function ListAdminPanel({ isEditingName, setIsEditingName, listNa
                     value={newItem} 
                     onChange={hanndleNewItemChange} 
                     placeholder={t("pages.list.newItem")} 
-                    className="border rounded-md px-2 h-8" 
+                    className="border rounded-md px-2 h-8 dark:bg-gray-800 dark:text-white" 
                 />
-                <AddBoxIcon sx={{ fontSize: "30px", cursor: "pointer" }} onClick={handleAddItem} />
+                <AddBoxIcon sx={{ fontSize: "30px", cursor: "pointer" }} className={"dark:text-white"} onClick={handleAddItem} />
             </div>
             {list && user && user.uuid === list.owner.uuid && (
                 <div className={"flex flex-row gap-4"}>
-                    <GroupIcon sx={{ fontSize: "30px", cursor: "pointer" }} onClick={() => setShowUserEdit(true)} />
+                    <GroupIcon sx={{ fontSize: "30px", cursor: "pointer" }} className={"dark:text-white"} onClick={() => setShowUserEdit(true)} />
                     {isEditingName ? (
-                        <DoneIcon sx={{ fontSize: "30px", cursor: "pointer" }} onClick={handleNameChange} />
+                        <DoneIcon sx={{ fontSize: "30px", cursor: "pointer" }} className={"dark:text-white"} onClick={handleNameChange} />
                     ) : (
-                        <SettingsIcon sx={{ fontSize: "30px", cursor: "pointer" }} onClick={() => setIsEditingName(true)} />
+                        <SettingsIcon sx={{ fontSize: "30px", cursor: "pointer" }} className={"dark:text-white"} onClick={() => setIsEditingName(true)} />
                     )}
                 </div>
             )}

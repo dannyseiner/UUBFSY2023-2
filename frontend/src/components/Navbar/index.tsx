@@ -11,6 +11,7 @@ import LanguageSwitcher from "../LanguageSwitcher";
 
 import CloseIcon from '@mui/icons-material/Close';
 import MenuIcon from '@mui/icons-material/Menu';
+import ModeToggle from "../modeToggle";
 
 type Link = {
   label: string;
@@ -54,10 +55,10 @@ export default function Navbar() {
       value={loggedUser}
       label="name"
       onChange={handleUserChange}
-      className={"h-[30px]"}
+      className={"h-[30px] dark:text-white"}
     >
       {mockUsers.map((user) => (
-        <MenuItem value={user.uuid} key={user.uuid}>{user.name}</MenuItem>
+        <MenuItem value={user.uuid} key={user.uuid} className={"dark:bg-gray-600 text-black dark:text-white"}>{user.name}</MenuItem>
       ))}
     </Select>
     )
@@ -67,7 +68,7 @@ export default function Navbar() {
     <>
       <div
         className={
-          "hidden fixed top-[20px] w-[80%] left-[10%] sm:flex items-center justify-between bg-[rgba(255,255,255,0.8)] shadow-2xl px-4 py-2 rounded-xl font-bold backdrop-blur"
+          "hidden fixed top-[20px] w-[80%] left-[10%] sm:flex items-center justify-between bg-[rgba(255,255,255,0.8)] dark:bg-gray-700 shadow-2xl px-4 py-2 rounded-xl font-bold backdrop-blur dark:text-white"
         }
       >
         <Link to={"/"} className={"text-[18px] text-orange-400"}>
@@ -81,13 +82,14 @@ export default function Navbar() {
           ))}
           <LanguageSwitcher />
           {renderUserSelect()}
+          <ModeToggle />
         </div>
       </div>
 
 
       <div
         className={
-          "block sm:hidden fixed top-[20px] w-[80%] left-[10%] items-center justify-between bg-[rgba(255,255,255,0.8)] shadow-2xl px-4 py-2 rounded-xl font-bold backdrop-blur"
+          "block sm:hidden fixed top-[20px] w-[80%] left-[10%] items-center justify-between bg-[rgba(255,255,255,0.8)] dark:bg-gray-700 shadow-2xl px-4 py-2 rounded-xl font-bold backdrop-blur dark:text-white"
         }
       >
         <div className={"flex justify-between w-full"}>
@@ -106,6 +108,7 @@ export default function Navbar() {
             ))}
             <LanguageSwitcher />
             {renderUserSelect()}
+            <ModeToggle />
           </div>
           </>
         )}

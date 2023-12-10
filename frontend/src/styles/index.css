@@ -5,3 +5,8 @@
 body {
   background-color: #ececec;
 }
+
+/* Dark mode background */
+.dark body {
+  background-color: #212020;
+}

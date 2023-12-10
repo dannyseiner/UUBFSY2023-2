@@ -24,10 +24,10 @@ export default function LanguageSwitcher() {
     value={i18n.language}
     label="Age"
     onChange={handleLanguageChagne}
-    className='h-[30px]'
+    className='h-[30px] dark:text-white'
   >
     {langs.map((lang, index) => (
-        <MenuItem value={lang.value} key={index}>{lang.label}</MenuItem>
+        <MenuItem value={lang.value} key={index} className={"dark:bg-gray-600 text-black dark:text-white"}>{lang.label}</MenuItem>
     ))}
   </Select>
 </FormControl>

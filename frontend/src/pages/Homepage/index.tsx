@@ -31,7 +31,7 @@ export default function Homepage() {
       <div className={"flex justify-center"}>
         <div className={"w-[80%] flex flex-col gap-[20px]"}>
           <div className={"flex justify-between flex-col sm:flex-row"}>
-            <p className={"text-[24px] font-bold"}>{t("pages.homepage.lists")}</p>
+            <p className={"text-[24px] font-bold dark:text-white"}>{t("pages.homepage.lists")}</p>
             <div className={"flex gap-[10px]"}>
               <div className={"flex items-center gap-[10px] cursor-pointer"}>
                 <p className={"text-[18px] font-bold text-orange-400"}>+</p>
@@ -46,10 +46,10 @@ export default function Homepage() {
               <div
                 key={index}
                 className={
-                  "flex items-center justify-between bg-[rgba(255,255,255,0.8)] shadow-2xl px-4 py-2 rounded-xl"
+                  "flex items-center justify-between bg-[rgba(255,255,255,0.8)] dark:bg-gray-700 shadow-2xl px-4 py-2 rounded-xl"
                 }
               >
-                <Link className={"text-[18px] font-bold"} to={`/list/${list.uuid}`}>{list.name}</Link>
+                <Link className={"text-[18px] font-bold dark:text-white"} to={`/list/${list.uuid}`}>{list.name}</Link>
                 {list.owner.uuid === user.uuid && (
                   <div className={"flex gap-[10px]"} onClick={() => handleDeleteShoppingList(list)}>
                     <div

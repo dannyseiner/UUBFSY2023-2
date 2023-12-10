@@ -38,7 +38,7 @@ export default function FilterMenu({ list, setList }: FilterProps) {
 
     const renderFilterButton = (title: string, onClick: () => void) => {
         return (
-            <button onClick={onClick} className={"border rounded-md px-2 py-1"}>
+            <button onClick={onClick} className={"border rounded-md px-2 py-1 dark:bg-gray-500 dark:text-white"}>
                 {title}
             </button>
         )

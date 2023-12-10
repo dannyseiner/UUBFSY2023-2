@@ -177,16 +177,17 @@ export default function ShoppingList() {
         open={showUserEdit}
         setOpen={(e) => setShowUserEdit(e)}
       >
-        <p className={"font-bold text-[16px]"}>{t("pages.list.users")}</p>
+        <p className={"font-bold text-[16px] dark:text-white"}>{t("pages.list.users")}</p>
         <div className={"w-full flex items-center gap-[10px] py-4"}>
           <input
             type={"text"}
-            className={"border rounded-md flex-1"}
+            className={"border rounded-md flex-1 dark:bg-gray-500 dark:text-white"}
             onChange={handleNewUserChange}
             value={newUser}
           />
           <PersonAddIcon
             sx={{ fontSize: "20px", cursor: "pointer" }}
+            className={"dark:text-white"}
             onClick={() => handleAddUser()}
           />
         </div>
@@ -194,17 +195,18 @@ export default function ShoppingList() {
           {list &&
             list.users.map((user) => (
               <div className={"flex items-center justify-between"} key={user.uuid}>
-                <p>{user.name}</p>
+                <p className={'dark:text-white'}>{user.name}</p>
                 <PersonRemoveIcon
                   sx={{ fontSize: "20px", cursor: "pointer" }}
                   onClick={() => handleRemoveUser(user)}
+                  className={"dark:text-white"}
                 />
               </div>
             ))}
         </div>
       </Drawer>
 
-      <div className={"w-[80%] bg-white mx-auto rounded-lg px-4 py-6"}>
+      <div className={"w-[80%] bg-white dark:bg-gray-700 mx-auto rounded-lg px-4 py-6"}>
         <div className={"flex items-center justify-between"}>
           <FilterMenu list={list} setList={(e: List) => setFilteredList(e)} />
         </div>
@@ -222,7 +224,7 @@ export default function ShoppingList() {
                 >
                   <input type={"checkbox"} checked={item.archived} />
                   <p
-                    className={`${item.archived ? "line-through text-gray-300" : ""
+                    className={`${item.archived ? "line-through text-gray-300 dark:text-gray-600" : "dark:text-gray-300"
                       }`}
                   >
                     {item.name}

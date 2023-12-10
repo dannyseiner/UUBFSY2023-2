@@ -31,7 +31,7 @@ export default function Drawer({
       )}
       <div
         className={
-          "w-[300px] right-[30px] fixed bg-white shadow-2xl h-[calc(100vh-60px)] top-[30px] rounded-md p-4 transition-all z-20" +
+          "w-[300px] right-[30px] fixed dark:bg-gray-700 bg-white shadow-2xl h-[calc(100vh-60px)] top-[30px] rounded-md p-4 transition-all z-20" +
           className
         }
       >
@@ -39,6 +39,7 @@ export default function Drawer({
           <CloseIcon
             sx={{ fontSize: "30px", cursor: "pointer" }}
             onClick={() => setOpen(!open)}
+            className={"dark:text-white"}
           />
         </div>
         <div>{children}</div>

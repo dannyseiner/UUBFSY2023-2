@@ -41,17 +41,17 @@ export default function CreateShoppingList() {
     return (
         <div>
             <div className={"flex justify-center items-center h-screen mt-[-100px]"}>
-                <div className={"w-[400px] flex flex-col bg-white rounded-xl px-[20px] pb-[40px] pt-[20px] relative gap-[20px]"}>
+                <div className={"w-[400px] flex flex-col bg-white dark:bg-gray-700 rounded-xl px-[20px] pb-[40px] pt-[20px] relative gap-[20px]"}>
                     <div>
-                        <h1 className={"text-2xl font-semibold text-center"}>{t("pages.create.createList")}</h1>
+                        <h1 className={"text-2xl font-semibold text-center dark:text-white"}>{t("pages.create.createList")}</h1>
                     </div>
                     <div className={"absolute top-[23px] left-[10px]"}>
                         <Link to={"/"}>
                             <KeyboardReturnIcon />
                         </Link>
                     </div>
-                    <input type={"text"} value={name} onChange={handleNameChange} className={"border border-gray-300 px-4 py-2 rounded-md mt-[30px]"} placeholder={t('pages.create.input')} />
-                    <button onClick={() => handleAddList()} className={"font-medium bg-orange-500 rounded-md w-fit px-4 py-2 mx-auto mt-[10px]"}>{t("pages.create.create")}</button>
+                    <input type={"text"} value={name} onChange={handleNameChange} className={"border border-gray-300 px-4 py-2 rounded-md mt-[30px] dark:bg-gray-800 dark:text-white"} placeholder={t('pages.create.input')} />
+                    <button onClick={() => handleAddList()} className={"font-medium bg-orange-500 rounded-md w-fit px-4 py-2 mx-auto mt-[10px] dark:text-white"}>{t("pages.create.create")}</button>
                 </div>
             </div>
         </div>
