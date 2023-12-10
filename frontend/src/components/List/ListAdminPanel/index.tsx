@@ -7,7 +7,7 @@ import GroupIcon from "@mui/icons-material/Group";
 import SettingsIcon from "@mui/icons-material/Settings";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import DoneIcon from "@mui/icons-material/Done";
-import { ShoppingListsContext } from '../../../context/ShoppingLists';
+import { useTranslation } from 'react-i18next';
 
 type AdminPanelProps = {
     isEditingName: boolean;
@@ -25,53 +25,50 @@ type AdminPanelProps = {
 }
 
 export default function ListAdminPanel({ isEditingName, setIsEditingName, listName, setListName, newItem, handleLeaveList, hanndleNewItemChange, handleAddItem, list, setShowUserEdit, handleNameChange }: AdminPanelProps) {
+    const {t} = useTranslation()
     const { user } = useContext(UserContext);
-    const { shoppingLists, setShoppingLists } = useContext(ShoppingListsContext)
 
     return (
         <div className={""}>
-            <div className={"flex items-center justify-between mt-[20px] uppercase"}>
-                {isEditingName ? (
-                    <input
-                        type={"text"}
-                        value={listName}
-                        className={"border rounded-md px-2"}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                            setListName(e.target.value)
-                        }
-                    />
-                ) : (
-                    <p className={"text-[16px] font-bold text-orange-300"}>{list?.name}</p>
-                )}
-                <div className={"flex gap-[20px]"}>
-                    <div className={"flex items-center gap-[10px]"}>
-                        <input type={'text'} value={newItem} onChange={hanndleNewItemChange} placeholder={"new item"} className={"border rounded-md px-2 h-[30px]"} />
-                        <AddBoxIcon sx={{ fontSize: "30px", cursor: "pointer" }} onClick={() => handleAddItem()} />
-                    </div>
-                    {list && user && user.uuid === list.owner.uuid && (
-                        <>
-                            <GroupIcon
-                                sx={{ fontSize: "30px", cursor: "pointer" }}
-                                onClick={() => setShowUserEdit(true)}
-                            />
-                            {isEditingName ? (
-                                <DoneIcon
-                                    sx={{ fontSize: "30px", cursor: "pointer" }}
-                                    onClick={() => handleNameChange()}
-                                />
-                            ) : (
-                                <SettingsIcon
-                                    sx={{ fontSize: "30px", cursor: "pointer" }}
-                                    onClick={() => setIsEditingName(true)}
-                                />
-                            )}
-                        </>
-                    )}
-                    {list && user && user.uuid !== list.owner.uuid && (
-                        <button className={"border border-red-500 text-red-500 px-2 rounded-md hover:bg-red-500 hover:text-white py-1"} onClick={() => handleLeaveList()}>Leave</button>
+            <div className="flex flex-col sm:flex-row items-center justify-between">
+        {isEditingName ? (
+            <input
+                type="text"
+                value={listName}
+                className="border rounded-md px-2 mb-2 sm:mb-0"
+                onChange={(e) => setListName(e.target.value)}
+            />
+        ) : (
+            <p className="text-lg font-bold text-orange-300 py-5 md:py-0">{list?.name}</p>
+        )}
+        <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex items-center gap-2">
+                <input 
+                    type='text' 
+                    value={newItem} 
+                    onChange={hanndleNewItemChange} 
+                    placeholder={t("pages.list.newItem")} 
+                    className="border rounded-md px-2 h-8" 
+                />
+                <AddBoxIcon sx={{ fontSize: "30px", cursor: "pointer" }} onClick={handleAddItem} />
+            </div>
+            {list && user && user.uuid === list.owner.uuid && (
+                <div className={"flex flex-row gap-4"}>
+                    <GroupIcon sx={{ fontSize: "30px", cursor: "pointer" }} onClick={() => setShowUserEdit(true)} />
+                    {isEditingName ? (
+                        <DoneIcon sx={{ fontSize: "30px", cursor: "pointer" }} onClick={handleNameChange} />
+                    ) : (
+                        <SettingsIcon sx={{ fontSize: "30px", cursor: "pointer" }} onClick={() => setIsEditingName(true)} />
                     )}
                 </div>
-            </div>
+            )}
+            {list && user && user.uuid !== list.owner.uuid && (
+                <button className="border border-red-500 text-red-500 px-2 rounded-md hover:bg-red-500 hover:text-white py-1" onClick={handleLeaveList}>
+                    {t("pages.list.leave")}
+                </button>
+            )}
+        </div>
+    </div>
         </div>
     )
 }

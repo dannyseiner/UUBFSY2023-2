@@ -12,12 +12,12 @@ export default function Homepage() {
   const {data, isLoading} = useShoppingLists()
   const [lists, setLists] = useState<List[]>(mockLists);
   const { user } = useContext(UserContext)
-  const {t, i18n} = useTranslation()
+  const {t} = useTranslation()
 
   const handleDeleteShoppingList = (list: List) => {
-    if (window.confirm("Přejete si smazat list?")) {
+    if (window.confirm(t("global.deleteConfirm"))) {
       api.delete("/shopping-list/" + list.uuid)
-      alert("List smazán")
+      alert(t("global.listDeleted"))
     }
   }
 
@@ -25,21 +25,18 @@ export default function Homepage() {
     if(data) setLists(data)
   }, [data])
 
-
-
-
   return (
     <div>
       {isLoading ?? <Loader />}
       <div className={"flex justify-center"}>
         <div className={"w-[80%] flex flex-col gap-[20px]"}>
-          <div className={"flex justify-between"}>
-            <p className={"text-[24px] font-bold"}>Nákupní seznamy</p>
+          <div className={"flex justify-between flex-col sm:flex-row"}>
+            <p className={"text-[24px] font-bold"}>{t("pages.homepage.lists")}</p>
             <div className={"flex gap-[10px]"}>
               <div className={"flex items-center gap-[10px] cursor-pointer"}>
                 <p className={"text-[18px] font-bold text-orange-400"}>+</p>
                 <Link className={"text-[18px] font-bold text-orange-400"} to={"/list/create"}>
-                  Vytvořit seznam
+                  {t("pages.homepage.create")}
                 </Link>
               </div>
             </div>
@@ -59,7 +56,7 @@ export default function Homepage() {
                       className={"flex items-center gap-[10px] cursor-pointer"}
                     >
                       <p className={"text-[18px] font-bold text-orange-400"}>
-                        Smazat
+                        {t("global.delete")}
                       </p>
                     </div>
                   </div>

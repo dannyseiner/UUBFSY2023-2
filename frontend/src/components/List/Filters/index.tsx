@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 import { List } from '../../../types/list'
+import { useTranslation } from 'react-i18next'
 
 type FilterProps = {
     list: List | undefined
@@ -8,6 +9,7 @@ type FilterProps = {
 }
 
 export default function FilterMenu({ list, setList }: FilterProps) {
+    const {t} = useTranslation()
     const [filterBy, setFilterBy] = useState<"all" | "archived" | "unarchived">("all")
 
 
@@ -44,9 +46,9 @@ export default function FilterMenu({ list, setList }: FilterProps) {
 
     return (
         <div>
-            {renderFilterButton("All", () => setFilterBy("all"))}
-            {renderFilterButton("Archived", () => setFilterBy("archived"))}
-            {renderFilterButton("Unarchived", () => setFilterBy("unarchived"))}
+            {renderFilterButton(t("global.filter.all"), () => setFilterBy("all"))}
+            {renderFilterButton(t("global.filter.active"), () => setFilterBy("archived"))}
+            {renderFilterButton(t("global.filter.completed"), () => setFilterBy("unarchived"))}
         </div>
     )
 }

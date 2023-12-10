@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { mockLists } from "../../data/lists";
 import { List } from "../../types/list";
 import { Item } from "../../types/item";
 import Drawer from "../../components/Drawer";
@@ -14,12 +13,13 @@ import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import ListAdminPanel from "../../components/List/ListAdminPanel";
 import FilterMenu from "../../components/List/Filters";
-import { ShoppingListsContext } from "../../context/ShoppingLists";
 import { useShoppingList } from "../../components/api/Queries/useShoppingList";
 import Loader from "../../components/Loader";
 import { api } from "../../components/api";
+import { useTranslation } from "react-i18next";
 
 export default function ShoppingList() {
+  const {t} = useTranslation()
   const { listUuid } = useParams();
   const {isLoading, data} = useShoppingList(listUuid)
   const navigate = useNavigate()
@@ -46,7 +46,7 @@ export default function ShoppingList() {
         if (res.data) {
           setList(res.data)
         } else {
-          alert("List not found")
+          alert(t("errors.notFound"))
           navigate("/")
         }
       })
@@ -93,7 +93,7 @@ export default function ShoppingList() {
         setList({ ...list, items: _items });
         api.post('/shopping-list/' + listUuid, { ...list, items: _items })
       } else {
-        alert("Something went wrong");
+        alert(t("errors.unknown"));
       }
     } else {
       const _items: Item[] | undefined = list?.items.map((_item) => {
@@ -108,7 +108,7 @@ export default function ShoppingList() {
         setList({ ...list, items: _items });
         api.post('/shopping-list/' + listUuid, { ...list, items: _items })
       } else {
-        alert("Something went wrong");
+        alert(t("errors.unknown"));
       }
     }
   };
@@ -177,7 +177,7 @@ export default function ShoppingList() {
         open={showUserEdit}
         setOpen={(e) => setShowUserEdit(e)}
       >
-        <p className={"font-bold text-[16px]"}>Users management</p>
+        <p className={"font-bold text-[16px]"}>{t("pages.list.users")}</p>
         <div className={"w-full flex items-center gap-[10px] py-4"}>
           <input
             type={"text"}
