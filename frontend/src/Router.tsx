@@ -18,6 +18,7 @@ import { UserProvider } from "./context/UserContext";
 import { ShoppingListProvider } from "./context/ShoppingLists";
 
 
+
 function Router() {
   const queryClient = new QueryClient();
 

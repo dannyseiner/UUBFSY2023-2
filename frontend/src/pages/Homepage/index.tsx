@@ -6,11 +6,13 @@ import { UserContext } from "../../context/UserContext";
 import { useShoppingLists } from "../../components/api/Queries/useShoppingLists";
 import Loader from "../../components/Loader";
 import { api } from "../../components/api";
+import { useTranslation } from "react-i18next";
 
 export default function Homepage() {
   const {data, isLoading} = useShoppingLists()
   const [lists, setLists] = useState<List[]>(mockLists);
   const { user } = useContext(UserContext)
+  const {t, i18n} = useTranslation()
 
   const handleDeleteShoppingList = (list: List) => {
     if (window.confirm("Přejete si smazat list?")) {
@@ -22,6 +24,8 @@ export default function Homepage() {
   useEffect(() => {
     if(data) setLists(data)
   }, [data])
+
+
 
 
   return (
@@ -68,3 +72,4 @@ export default function Homepage() {
     </div>
   );
 }
+

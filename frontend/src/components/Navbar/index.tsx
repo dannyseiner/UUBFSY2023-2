@@ -5,6 +5,8 @@ import { User } from "../../types/user";
 import { mockUsers } from "../../data/users";
 import { MenuItem, Select } from "@mui/material";
 import { Menu } from "@mui/icons-material";
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "../LanguageSwitcher";
 
 type Link = {
   label: string;
@@ -19,6 +21,7 @@ const links: Link[] = [
 ];
 
 export default function Navbar() {
+  const {t} = useTranslation()
   const { user, setUser } = useContext(UserContext);
   const [loggedUser, setLoggedUser] = useState<string | undefined>(
     user?.uuid || undefined
@@ -44,7 +47,7 @@ export default function Navbar() {
       }
     >
       <Link to={"/"} className={"text-[18px] text-orange-400"}>
-        ShoppingList
+        {t("components.navbar.title")}
       </Link>
       <div className={"flex gap-[10px] items-center"}>
         {links.map((link, index) => (
@@ -52,6 +55,7 @@ export default function Navbar() {
             <p>{link.label}</p>
           </div>
         ))}
+        <LanguageSwitcher />
         <Select
           labelId="user-select"
           value={loggedUser}
